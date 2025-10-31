@@ -1,0 +1,48 @@
+codecov:
+  notify:
+    require_ci_to_pass: yes
+    after_n_builds: 2
+    wait_for_ci: yes
+
+coverage:
+  precision: 2
+  round: down
+  range: "70...100"
+  status:
+    project:
+      default:
+        target: 80%
+        threshold: 1%
+        base: auto
+    patch:
+      default:
+        target: 80%
+        threshold: 1%
+        base: auto
+
+comment:
+  layout: "reach,diff,flags,files"
+  behavior: default
+  require_changes: false
+  require_base: no
+  require_head: yes
+
+fixes:
+  - "src/::src/" # Map source files to correct directory structure
+
+ignore:
+  - "docs/**/*"
+  - "ui-docs/**/*"
+  - "bin/**/*"
+  - "**/*.md"
+  - "**/*.json"
+  - "**/*.yml"
+  - "**/*.yaml"
+
+parsers:
+  gcov:
+    branch_detection:
+      conditional: yes
+      loop: yes
+      method: no
+      macro: no
