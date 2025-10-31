@@ -1,0 +1,90 @@
+{
+    "name": "material-web-mcp",
+    "version": "0.1.0",
+    "description": "MCP server for Material Web documentation",
+    "type": "module",
+    "bin": {
+        "material-web-mcp": "./bin/material-web-mcp"
+    },
+    "dependencies": {
+        "@modelcontextprotocol/sdk": "1.20.0",
+        "cheerio": "^1.0.0",
+        "material-web-mcp": "file:material-web-mcp-0.1.0.tgz",
+        "winston": "3.13.0",
+        "zod": "3.23.0"
+    },
+    "scripts": {
+        "start": "node src/server.js",
+        "build": "node -c src/server.js",
+        "test": "jest",
+        "lint": "eslint src/**/*.js src/**/*.mjs",
+        "coverage": "jest --coverage",
+        "semantic-release": "semantic-release"
+    },
+    "author": {
+        "name": "Shanto Islam",
+        "email": "shantoislamdev@gmail.com",
+        "url": "https://shantoislamdev.web.app",
+        "github": "https://github.com/shanroislamdev"
+    },
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/shantoislamdev/material-web-mcp.git"
+    },
+    "bugs": {
+        "url": "https://github.com/shantoislamdev/material-web-mcp/issues"
+    },
+    "keywords": [
+        "mcp",
+        "material-web",
+        "documentation"
+    ],
+    "engines": {
+        "node": ">=18.0.0"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.28.4",
+        "@babel/plugin-syntax-import-meta": "^7.10.4",
+        "@babel/preset-env": "^7.28.3",
+        "babel-jest": "^30.2.0",
+        "babel-plugin-transform-import-meta": "^2.3.3",
+        "jest": "30.2.0",
+        "eslint": "^8.57.0",
+        "@semantic-release/changelog": "^6.0.3",
+        "@semantic-release/git": "^10.0.1",
+        "@semantic-release/github": "^9.2.6",
+        "@semantic-release/npm": "^11.0.2",
+        "semantic-release": "^23.0.2",
+        "git-cliff": "^0.5.0"
+    },
+    "jest": {
+        "testMatch": [
+            "**/*.test.mjs"
+        ],
+        "transform": {
+            "^.+\\.(js|mjs)$": "babel-jest"
+        },
+        "transformIgnorePatterns": [
+            "node_modules/(?!(@modelcontextprotocol|zod|cheerio)/)"
+        ]
+    },
+    "release": {
+        "branches": [
+            "main",
+            "develop"
+        ],
+        "plugins": [
+            "@semantic-release/commit-analyzer",
+            "@semantic-release/release-notes-generator",
+            [
+                "@semantic-release/changelog",
+                {
+                    "changelogFile": "CHANGELOG.md"
+                }
+            ],
+            "@semantic-release/npm",
+            "@semantic-release/github"
+        ]
+    }
+}

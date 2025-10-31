@@ -1,0 +1,34 @@
+#!/usr/bin/env node
+
+/**
+ * Material Web MCP Server - Binary Entry Point
+ *
+ * Copyright (c) 2025 Shanto Islam
+ *
+ * GitHub: https://github.com/shanroislamdev
+ * Repository: https://github.com/shanroislamdev/material-web-mcp
+ * License: https://github.com/shanroislamdev/material-web-mcp/blob/main/LICENSE
+ *
+ * Licensed under the MIT License.
+ */
+import { spawn } from 'child_process';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const serverPath = join(__dirname, '..', 'src', 'server.js');
+
+const serverProcess = spawn('node', [serverPath], {
+    stdio: 'inherit',
+    cwd: join(__dirname, '..')
+});
+
+serverProcess.on('error', (error) => {
+    console.error('Failed to start server:', error);
+    process.exit(1);
+});
+
+serverProcess.on('exit', (code) => {
+    process.exit(code);
+});

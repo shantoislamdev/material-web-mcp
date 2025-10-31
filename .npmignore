@@ -1,0 +1,8 @@
+coverage/
+src/server.test.mjs
+babel.config.cjs
+package-lock.json
+src/server.test.js
+docs/
+test-install/
+*.tgz

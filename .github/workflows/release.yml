@@ -1,0 +1,114 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version (e.g., 1.0.0)"
+        required: true
+        type: string
+      prerelease:
+        description: "Mark as pre-release"
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      id-token: write
+      discussions: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          registry-url: "https://registry.npmjs.org/"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests and linting
+        run: |
+          npm run lint
+          npm test
+
+      - name: Build project
+        run: npm run build
+
+      - name: Get version
+        id: version
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+          else
+            echo "version=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Update package.json version
+        run: |
+          npm version ${{ steps.version.outputs.version }} --no-git-tag-version
+
+      - name: Create release notes
+        id: release_notes
+        run: |
+          # Generate release notes from conventional commits
+          if command -v git-cliff &> /dev/null; then
+            git cliff --latest --strip all > RELEASE_NOTES.md
+          else
+            echo "## Changes" > RELEASE_NOTES.md
+            echo "" >> RELEASE_NOTES.md
+            echo "See the changelog for detailed changes." >> RELEASE_NOTES.md
+          fi
+
+          # Add release notes to outputs
+          {
+            echo 'release_notes<<EOF'
+            cat RELEASE_NOTES.md
+            echo 'EOF'
+          } >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ steps.version.outputs.version }}
+          name: Release v${{ steps.version.outputs.version }}
+          body: ${{ steps.release_notes.outputs.release_notes }}
+          draft: false
+          prerelease: ${{ github.event.inputs.prerelease || false }}
+          generate_release_notes: true
+          files: |
+            package.json
+            README.md
+
+      - name: Publish to npm
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+        run: |
+          npm publish --provenance --access public
+
+      - name: Update changelog
+        if: github.event_name == 'push'
+        run: |
+          # Update changelog if git-cliff is available
+          if command -v git-cliff &> /dev/null; then
+            git cliff --latest --unreleased > CHANGELOG.md
+            git add CHANGELOG.md
+            git config user.name github-actions[bot]
+            git config user.email github-actions[bot]@users.noreply.github.com
+            git commit -m "chore: update changelog for v${{ steps.version.outputs.version }}"
+            git push
+          fi
