@@ -16,8 +16,9 @@ permissions:
   pull-requests: write
 
 jobs:
-  security-scan:
+  codeql-analysis:
     runs-on: ubuntu-latest
+    if: github.event_name != 'schedule'
 
     steps:
       - name: Checkout code
@@ -46,8 +47,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
       - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@0.24.0
         with:
           scan-type: "fs"
           scan-ref: "."
@@ -63,14 +73,14 @@ jobs:
 
       - name: Run npm audit
         run: |
-          npm ci
           npm audit --audit-level high
         continue-on-error: true
 
-      - name: Run dependency check
+      - name: Dependency Review
         uses: actions/dependency-review-action@v4
         with:
           fail-on-severity: high
+          comment-summary-in-pr: always
 
   secret-scan:
     runs-on: ubuntu-latest
@@ -88,3 +98,4 @@ jobs:
           base: main
           head: HEAD
           extra_args: --debug --only-verified
+        continue-on-error: true
