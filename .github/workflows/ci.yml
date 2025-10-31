@@ -1,27 +1,100 @@
 name: Run tests and upload coverage
 
-on: push
+on:
+  push:
+  pull_request:
 
 jobs:
   test:
     name: Run tests and collect coverage
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 0 # Full history for better analysis
 
-      - name: Set up Node
+      - name: Setup Node.js
         uses: actions/setup-node@v4
+        with:
+          node-version: "20" # Use Node.js 20 as specified in engines
+          cache: "npm"
+
+      - name: Verify Node.js version
+        run: |
+          node --version
+          npm --version
 
       - name: Install dependencies
-        run: npm install
+        run: |
+          echo "Installing dependencies..."
+          npm ci  # Use ci for cleaner installs in CI
+        continue-on-error: false
 
-      - name: Run tests
-        run: npx jest --coverage
+      - name: Run linting
+        run: |
+          echo "Running ESLint..."
+          npm run lint
+        continue-on-error: true # Don't fail CI on lint warnings
 
-      - name: Upload results to Codecov
+      - name: Run unit tests (server only)
+        run: |
+          echo "Running server unit tests..."
+          npx jest src/server.test.mjs --coverage --verbose
+        env:
+          JEST_TIMEOUT: 10000
+        timeout-minutes: 5
+
+      - name: Run integration tests (client only)
+        run: |
+          echo "Running client integration tests..."
+          npx jest src/client.test.mjs --coverage --verbose --testTimeout=15000
+        env:
+          JEST_TIMEOUT: 15000
+          NODE_OPTIONS: "--max-old-space-size=4096"
+        timeout-minutes: 10
+        continue-on-error: true # Integration tests can be flaky
+
+      - name: Run all tests together
+        run: |
+          echo "Running complete test suite..."
+          npm test -- --coverage --verbose --maxWorkers=2
+        env:
+          JEST_TIMEOUT: 10000
+          NODE_OPTIONS: "--max-old-space-size=4096"
+        timeout-minutes: 8
+
+      - name: Generate coverage report
+        run: |
+          echo "Coverage files generated:"
+          ls -la coverage/
+          echo "Coverage summary:"
+          npx jest --coverage --coverageReporters=text-summary
+
+      - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage/lcov.info
+          fail_ci_if_error: false # Don't fail CI if codecov upload fails
+          verbose: true
+        continue-on-error: true
+
+      - name: Display test results
+        if: always()
+        run: |
+          echo "=== Test Execution Summary ==="
+          echo "Node.js version: $(node --version)"
+          echo "NPM version: $(npm --version)"
+          echo "Current directory: $(pwd)"
+          echo "Files in current directory:"
+          ls -la
+
+          if [ -d "coverage" ]; then
+            echo "Coverage directory contents:"
+            ls -la coverage/
+          else
+            echo "No coverage directory found"
+          fi
+        continue-on-error: true

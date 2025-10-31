@@ -1,0 +1,38 @@
+name: Simple CI Pipeline
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    name: Run Tests (Simple)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: |
+          echo "Running tests with coverage..."
+          npm test -- --coverage --silent
+        env:
+          CI: true
+          NODE_ENV: test
+
+      - name: Upload coverage (optional)
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: false
+        continue-on-error: true
