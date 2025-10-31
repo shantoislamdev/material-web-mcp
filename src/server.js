@@ -72,7 +72,10 @@ async function scanDocsDir() {
 // Refresh cache function
 async function refreshDocCache() {
     cachedDocFiles = null;
-    await scanDocsDir();
+    // Don't automatically rescan during tests to avoid real file system access
+    if (process.env.NODE_ENV !== 'test') {
+        await scanDocsDir();
+    }
 }
 
 
