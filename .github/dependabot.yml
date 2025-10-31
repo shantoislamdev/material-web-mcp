@@ -9,7 +9,7 @@ updates:
       time: "09:00"
     open-pull-requests-limit: 10
     reviewers:
-      - "shanroislamdev"
+      - "shantoislamdev"
     commit-message:
       prefix: "deps"
       include: "scope"
@@ -42,7 +42,7 @@ updates:
       time: "10:00"
     open-pull-requests-limit: 5
     reviewers:
-      - "shanroislamdev"
+      - "shantoislamdev"
     commit-message:
       prefix: "ci"
       include: "scope"

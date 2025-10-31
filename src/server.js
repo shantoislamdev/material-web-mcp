@@ -3,9 +3,9 @@
  *
  * Copyright (c) 2025 Shanto Islam
  *
- * GitHub: https://github.com/shanroislamdev
- * Repository: https://github.com/shanroislamdev/material-web-mcp
- * License: https://github.com/shanroislamdev/material-web-mcp/blob/main/LICENSE
+ * GitHub: https://github.com/shantoislamdev
+ * Repository: https://github.com/shantoislamdev/material-web-mcp
+ * License: https://github.com/shantoislamdev/material-web-mcp/blob/main/LICENSE
  *
  * Licensed under the MIT License.
  */

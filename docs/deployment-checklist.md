@@ -5,7 +5,7 @@
 ### 1. Repository Configuration
 
 - [ ] **Repository Name**: `material-web-mcp`
-- [ ] **Owner**: `shanroislamdev`
+- [ ] **Owner**: `shantoislamdev`
 - [ ] **Description**: "MCP server for Material Web documentation"
 - [ ] **Visibility**: Public (recommended for open source)
 - [ ] **Initialize repository**: README.md, .gitignore, MIT License
@@ -104,7 +104,7 @@ Once deployed, the following workflows will be active:
 - [ ] **Dependencies**: Weekly updates for npm packages
 - [ ] **GitHub Actions**: Weekly updates
 - [ ] **Security updates**: Automatic
-- [ ] **Reviewers**: `shanroislamdev`
+- [ ] **Reviewers**: `shantoislamdev`
 - [ ] **Labels**: `dependencies`, `automated`
 
 #### Semantic Release (`.releaserc.json`)
@@ -132,7 +132,7 @@ Once deployed, the following workflows will be active:
 
 ```bash
 # Create repository on GitHub using gh CLI (or web interface)
-gh repo create shanroislamdev/material-web-mcp --public --source=. --push
+gh repo create shantoislamdev/material-web-mcp --public --source=. --push
 ```
 
 ### Step 2: Configure Branch Protection
