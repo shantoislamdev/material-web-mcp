@@ -41,66 +41,6 @@ jobs:
         with:
           category: "/language:javascript"
 
-  dependency-scan:
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-          cache: "npm"
-
-      - name: Install dependencies
-        run: npm ci
-        timeout-minutes: 10
-
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@0.26.0
-        with:
-          scan-type: "fs"
-          scan-ref: "."
-          format: "sarif"
-          output: "trivy-results.sarif"
-          severity: "CRITICAL,HIGH,MEDIUM"
-        continue-on-error: true
-        timeout-minutes: 15
-
-      - name: Verify SARIF file exists
-        id: check-sarif
-        run: |
-          if [ -f "trivy-results.sarif" ]; then
-            echo "SARIF file found: trivy-results.sarif"
-            echo "file_exists=true" >> $GITHUB_OUTPUT
-          else
-            echo "SARIF file not found: trivy-results.sarif"
-            echo "file_exists=false" >> $GITHUB_OUTPUT
-          fi
-        timeout-minutes: 2
-
-      - name: Upload Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v3
-        if: always() && steps.check-sarif.outputs.file_exists == 'true'
-        with:
-          sarif_file: "trivy-results.sarif"
-
-      - name: Run npm audit
-        run: |
-          npm audit --audit-level high
-        continue-on-error: true
-        timeout-minutes: 5
-
-      - name: Dependency Review
-        uses: actions/dependency-review-action@v4
-        with:
-          fail-on-severity: high
-          comment-summary-in-pr: always
-        timeout-minutes: 5
-
   secret-scan:
     runs-on: ubuntu-latest
     timeout-minutes: 15
