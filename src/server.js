@@ -549,6 +549,7 @@ export {
     getInstallationDocs,
     extractApi,
     validateWebsite,
+    withTimeout,
     server
 };
 
