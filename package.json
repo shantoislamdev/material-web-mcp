@@ -41,7 +41,7 @@
         "documentation"
     ],
     "engines": {
-        "node": ">=20.0.0"
+        "node": ">=18.17"
     },
     "devDependencies": {
         "@babel/core": "^7.28.4",

@@ -2,14 +2,14 @@
 
 [![npm version](https://img.shields.io/npm/v/material-web-mcp.svg)](https://www.npmjs.com/package/material-web-mcp)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Node.js Version](https://img.shields.io/badge/Node.js-%3E%3D18.0.0-brightgreen.svg)](https://nodejs.org/)
+[![Node.js Version](https://img.shields.io/badge/Node.js-%3E%3D18.17-brightgreen.svg)](https://nodejs.org/)
 [![CI Status](https://img.shields.io/github/actions/workflow/status/shantoislamdev/material-web-mcp/ci.yml?branch=main&label=CI)](https://github.com/shantoislamdev/material-web-mcp/actions/workflows/ci.yml)
 [![codecov](https://img.shields.io/codecov/c/github/shantoislamdev/material-web-mcp)](https://codecov.io/gh/shantoislamdev/material-web-mcp)
 [![GitHub issues](https://img.shields.io/github/issues/shantoislamdev/material-web-mcp)](https://github.com/shantoislamdev/material-web-mcp/issues)
 
 An MCP server providing programmatic access to Material Web documentation for AI agents (Claude, Cursor, Cline, Copilot, etc.).
 
-**Requirements:** Node.js >= 18.0.0
+**Requirements:** Node.js >= 18.17
 
 ## Quick Start
 

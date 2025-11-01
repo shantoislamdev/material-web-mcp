@@ -80,9 +80,9 @@ describe('escapeRegex', () => {
 describe('extractComponentNames', () => {
     const originalReaddir = fs.readdir;
 
-    afterEach(async () => {
+    afterEach(() => {
         fs.readdir = originalReaddir;
-        await refreshDocCache();
+        refreshDocCache();
     });
 
     it('should return component names from .md files', async () => {
@@ -107,10 +107,10 @@ describe('searchContent', () => {
     const originalReaddir = fs.readdir;
     const originalReadFile = fs.readFile;
 
-    afterEach(async () => {
+    afterEach(() => {
         fs.readdir = originalReaddir;
         fs.readFile = originalReadFile;
-        await refreshDocCache();
+        refreshDocCache();
     });
 
     it('should find matches in files', async () => {
@@ -187,9 +187,9 @@ describe('searchContent', () => {
 describe('loadDocStructure', () => {
     const originalReaddir = fs.readdir;
 
-    afterEach(async () => {
+    afterEach(() => {
         fs.readdir = originalReaddir;
-        await refreshDocCache();
+        refreshDocCache();
     });
 
     it('should load structure of .md files', async () => {
@@ -222,10 +222,10 @@ describe('registerDocResources', () => {
     const originalReaddir = fs.readdir;
     const originalReadFile = fs.readFile;
 
-    afterEach(async () => {
+    afterEach(() => {
         fs.readdir = originalReaddir;
         fs.readFile = originalReadFile;
-        await refreshDocCache();
+        refreshDocCache();
     });
 
     it('should register resources for .md files', async () => {
@@ -300,9 +300,9 @@ describe('registerDocResources', () => {
 describe('performHealthCheck', () => {
     const originalReaddir = fs.readdir;
 
-    afterEach(async () => {
+    afterEach(() => {
         fs.readdir = originalReaddir;
-        await refreshDocCache();
+        refreshDocCache();
     });
 
     it('should return healthy status when all checks pass', async () => {
@@ -547,7 +547,7 @@ describe('validateWebsite', () => {
         await expect(validateWebsite(html)).rejects.toThrow('fs error');
 
         fs.readdir = originalReaddir;
-        await refreshDocCache();
+        refreshDocCache();
     });
 });
 
@@ -572,9 +572,9 @@ describe('withTimeout', () => {
 describe('scanDocsDir', () => {
     const originalReaddir = fs.readdir;
 
-    afterEach(async () => {
+    afterEach(() => {
         fs.readdir = originalReaddir;
-        await refreshDocCache();
+        refreshDocCache();
     });
 
     it('should return markdown files', async () => {
@@ -598,9 +598,9 @@ describe('scanDocsDir', () => {
 describe('refreshDocCache', () => {
     const originalReaddir = fs.readdir;
 
-    afterEach(async () => {
+    afterEach(() => {
         fs.readdir = originalReaddir;
-        await refreshDocCache();
+        refreshDocCache();
     });
 
     it('should call scanDocsDir to refresh cache', async () => {
@@ -614,7 +614,7 @@ describe('refreshDocCache', () => {
         expect(readdirSpy).toHaveBeenCalled();
         
         fs.readdir = originalReaddir;
-        await refreshDocCache();
+        refreshDocCache();
     });
 });
 
@@ -622,10 +622,10 @@ describe('Error handling and edge cases', () => {
     const originalReadFile = fs.readFile;
     const originalReaddir = fs.readdir;
 
-    afterEach(async () => {
+    afterEach(() => {
         fs.readFile = originalReadFile;
         fs.readdir = originalReaddir;
-        await refreshDocCache();
+        refreshDocCache();
     });
 
     it('should handle file read errors gracefully in getComponentDoc', async () => {
@@ -691,7 +691,7 @@ describe('Error handling and edge cases', () => {
         expect(result).toEqual([]);
 
         fs.readdir = originalReaddir;
-        await refreshDocCache();
+        refreshDocCache();
     });
 
     it('should handle search with special regex characters', async () => {
@@ -709,10 +709,10 @@ describe('Additional coverage for uncovered branches', () => {
     const originalReadFile = fs.readFile;
     const originalReaddir = fs.readdir;
 
-    afterEach(async () => {
+    afterEach(() => {
         fs.readFile = originalReadFile;
         fs.readdir = originalReaddir;
-        await refreshDocCache();
+        refreshDocCache();
     });
 
     it('should handle API extraction with null component name', async () => {
@@ -752,7 +752,7 @@ describe('Additional coverage for uncovered branches', () => {
         
         fs.readdir = originalReaddir;
         fs.readFile = originalReadFile;
-        await refreshDocCache();
+        refreshDocCache();
     });
 
     it('should handle theming directory access error', async () => {
@@ -767,7 +767,7 @@ describe('Additional coverage for uncovered branches', () => {
         
         fs.readdir = originalReaddir;
         fs.readFile = originalReadFile;
-        await refreshDocCache();
+        refreshDocCache();
     });
 
     it('should handle missing quick-start file', async () => {
@@ -810,7 +810,7 @@ describe('Additional coverage for uncovered branches', () => {
         expect(result.warnings).toEqual([]);
         
         fs.readdir = originalReaddir;
-        await refreshDocCache();
+        refreshDocCache();
     });
 
     it('should handle validation with component matching edge cases', async () => {
@@ -838,7 +838,7 @@ describe('Additional coverage for uncovered branches', () => {
         
         fs.readdir = originalReaddir;
         fs.readFile = originalReadFile;
-        await refreshDocCache();
+        refreshDocCache();
     });
 
     it('should handle timeout in document scanning', async () => {
@@ -866,10 +866,10 @@ describe('Tool handlers comprehensive testing', () => {
     const originalReadFile = fs.readFile;
     const originalReaddir = fs.readdir;
 
-    afterEach(async () => {
+    afterEach(() => {
         fs.readFile = originalReadFile;
         fs.readdir = originalReaddir;
-        await refreshDocCache();
+        refreshDocCache();
     });
 
     describe('list_components tool handler', () => {
@@ -1088,7 +1088,7 @@ describe('Main server execution path', () => {
         registerDocResourcesSpy.mockRestore();
         fs.readdir = originalReaddir;
         fs.readFile = originalReadFile;
-        await refreshDocCache();
+        refreshDocCache();
     });
 });
 
@@ -1096,10 +1096,10 @@ describe('Comprehensive error path testing', () => {
     const originalReadFile = fs.readFile;
     const originalReaddir = fs.readdir;
 
-    afterEach(async () => {
+    afterEach(() => {
         fs.readFile = originalReadFile;
         fs.readdir = originalReaddir;
-        await refreshDocCache();
+        refreshDocCache();
     });
 
     it('should handle file read errors in searchContent gracefully', async () => {
@@ -1193,7 +1193,7 @@ describe('Resource handler testing', () => {
         server.registerResource.mockClear();
         fs.readdir = originalReaddir;
         fs.readFile = originalReadFile;
-        await refreshDocCache();
+        refreshDocCache();
     });
 
     it('should handle resource handler execution', async () => {
@@ -1226,7 +1226,7 @@ describe('Resource handler testing', () => {
         server.registerResource.mockClear();
         fs.readdir = originalReaddir;
         fs.readFile = originalReadFile;
-        await refreshDocCache();
+        refreshDocCache();
     });
 });
 
