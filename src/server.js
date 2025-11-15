@@ -275,8 +275,8 @@ async function extractApi(componentName) {
         const lines = table.split('\n').filter(l => l.trim());
         for (const line of lines) {
             const cells = line.split('|').map(c => c.trim());
-            if (cells.length > 1 && cells[1]) {
-                properties.push(cells[1]); // Attribute column
+            if (cells.length > 2 && cells[2]) {
+                properties.push(cells[2]);
             }
         }
     }
@@ -300,7 +300,8 @@ async function validateWebsite(html) {
                 errors.push(`Unknown component: ${tag}`);
             } else {
                 // Find which component this tag corresponds to
-                const matchingComponent = components.find(comp => tagName.includes(comp));
+                const sortedComponents = [...components].sort((a, b) => b.length - a.length);
+                const matchingComponent = sortedComponents.find(comp => tagName.includes(comp));
                 if (matchingComponent) {
                     let api = apiCache.get(matchingComponent);
                     if (!api) {
