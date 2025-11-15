@@ -549,6 +549,20 @@ describe('validateWebsite', () => {
         fs.readdir = originalReaddir;
         refreshDocCache();
     });
+
+    it('should correctly validate a component when its name is a substring of another', async () => {
+        fs.readFile = jest.fn().mockResolvedValue(`
+## API
+
+| Property | Attribute | Type | Default | Description |
+| --- | --- | --- | --- | --- |
+| ariaLabelSelected | aria-label-selected | string | '' | The aria-label of the button when the button is toggleable and selected. |
+`);
+        const html = '<html><body><md-icon-button aria-label-selected="Test label"></md-icon-button></body></html>';
+        const result = await validateWebsite(html);
+
+        expect(result.warnings.find(w => w.includes('Unknown attribute'))).toBeUndefined();
+    });
 });
 
 describe('withTimeout', () => {
